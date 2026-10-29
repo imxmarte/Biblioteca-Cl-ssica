@@ -50,7 +50,7 @@ int matrizEstante[CORREDORES][PRATELEIRAS];
 
 void exibirCabecalho() {
 printf("\n======================================================\n");
-printf("   BIBLIOTECA CLASSICA - FICHARIO RETRO (1985)        \n");
+printf("                  BIBLIOTECA CLASSICA            \n");
 printf("======================================================\n");
 }
 
