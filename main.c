@@ -9,7 +9,7 @@ do {
     printf("1. Modulo de Livros / Acervo\n");
     printf("2. Modulo de Leitores\n");
     printf("3. Modulo de Emprestimos e Devolucoes\n");
-    printf("4. Modulo de Matriz, Bubble Sort e Relatorios\n");
+    printf("4. Modulo de Prateleiras, Corredores e Relatorios\n");
     printf("0. Sair\n");
     printf("Escolha uma opcao: ");
     opcao = lerNumero();
