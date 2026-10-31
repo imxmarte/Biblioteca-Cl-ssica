@@ -2,13 +2,18 @@
 
 int main() {
 int opcao;
+
+//---- Marcela função Matriz corredores/prateleiras------
 inicializarMatriz();
 
 do {
+    //--------- Renan módulo de busca e cadastro----------
     exibirCabecalho();
     printf("1. Modulo de Livros / Acervo\n");
     printf("2. Modulo de Leitores\n");
+    // -------- Renan e Marcela módulo de empréstimos e devoluções
     printf("3. Modulo de Emprestimos e Devolucoes\n");
+    // ---------- Marcela módulo relatórios e posições físicas em matriz 
     printf("4. Modulo de Prateleiras, Corredores e Relatorios\n");
     printf("0. Sair\n");
     printf("Escolha uma opcao: ");
