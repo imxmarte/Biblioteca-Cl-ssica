@@ -1,5 +1,5 @@
 #include "biblioteca.h"
-
+// Renan cadastro de livros e leitores
 struct Livro acervo[MAX];
 int totalLivros = 0;
 
@@ -9,14 +9,17 @@ int totalLeitores = 0;
 struct Emprestimo emprestimos[MAX];
 int totalEmprestimos = 0;
 
+// Marcela matriz de posição física do livro
 int matrizEstante[CORREDORES][PRATELEIRAS];
 
+// Renan e Marcela estrutura de cabeçalho
 void exibirCabecalho() {
 printf("\n======================================================\n");
 printf("                  BIBLIOTECA CLASSICA            \n");
 printf("======================================================\n");
 }
 
+// Renan buscar livros e leitores
 void limparTeclado() {
 int c;
 c = getchar();
@@ -68,7 +71,7 @@ return i;
 }
 return -1;
 }
-
+// Marcela inicialização em 0 da matriz corredores/prateleiras sempre que o terminal for iniciado
 void inicializarMatriz() {
 int i, j;
 for (i = 0; i < CORREDORES; i++) {
@@ -78,6 +81,7 @@ matrizEstante[i][j] = 0;
 }
 }
 
+// Renan e Marcela módulo de cadastro e busca de livros e leitores junto com matriz
 void cadastrarLivro() {
 int id, corredor, prateleira;
 
