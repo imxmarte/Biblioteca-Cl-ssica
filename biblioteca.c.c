@@ -393,73 +393,78 @@ opcao = lerNumero();
 }
 
 void registrarEmprestimo() {
-int idLeitor, idLivro, posLeitor, posLivro;
+    int idLeitor, idLivro, posLeitor, posLivro;
 
-if (totalEmprestimos >= MAX) {
-    printf("\nNao e possivel registrar novos emprestimos, limite de %d atingido!\n", MAX);
-    return;
+    if (totalEmprestimos >= MAX) {
+        printf("\nNao e possivel registrar novos emprestimos, limite de %d atingido!\n", MAX);
+        return;
+    }
+
+    printf("\n--- Registrar Emprestimo ---\n");
+
+    printf("Digite a carteirinha do leitor: ");
+    idLeitor = lerNumero();
+    posLeitor = buscarLeitor(idLeitor);
+    if (posLeitor == -1) {
+        printf("\nERRO! Leitor nao cadastrado.\n");
+        return;
+    }
+
+    printf("Digite o ID do livro: ");
+    idLivro = lerNumero();
+    posLivro = buscarLivro(idLivro);
+    if (posLivro == -1) {
+        printf("\nERRO! Livro nao encontrado no acervo.\n");
+        return;
+    }
+    if (acervo[posLivro].disponivel == 0) {
+        printf("\nERRO! O livro \"%s\" ja esta emprestado.\n", acervo[posLivro].titulo);
+        return;
+    }
+
+    emprestimos[totalEmprestimos].id = totalEmprestimos + 1;
+    emprestimos[totalEmprestimos].idLivro = idLivro;
+    emprestimos[totalEmprestimos].idLeitor = idLeitor;
+    
+    strcpy(emprestimos[totalEmprestimos].tituloLivro, acervo[posLivro].titulo);
+    strcpy(emprestimos[totalEmprestimos].nomeLeitor, leitores[posLeitor].nome);
+
+    emprestimos[totalEmprestimos].diasPrazo = 7;
+    emprestimos[totalEmprestimos].devolvido = 0;
+    emprestimos[totalEmprestimos].ativo = 1;
+    emprestimos[totalEmprestimos].multa = 0.0f;
+    totalEmprestimos++;
+
+    acervo[posLivro].disponivel = 0;
+
+    printf("\nEmprestimo registrado: \"%s\" para %s (prazo: 7 dias).\n",
+           acervo[posLivro].titulo, leitores[posLeitor].nome);
 }
 
-printf("\n--- Registrar Emprestimo ---\n");
-
-printf("Digite a carteirinha do leitor: ");
-idLeitor = lerNumero();
-posLeitor = buscarLeitor(idLeitor);
-if (posLeitor == -1) {
-    printf("\nERRO! Leitor nao cadastrado.\n");
-    return;
-}
-
-printf("Digite o ID do livro: ");
-idLivro = lerNumero();
-posLivro = buscarLivro(idLivro);
-if (posLivro == -1) {
-    printf("\nERRO! Livro nao encontrado no acervo.\n");
-    return;
-}
-if (acervo[posLivro].disponivel == 0) {
-    printf("\nERRO! O livro \"%s\" ja esta emprestado.\n", acervo[posLivro].titulo);
-    return;
-}
-
-emprestimos[totalEmprestimos].id = totalEmprestimos + 1;
-emprestimos[totalEmprestimos].idLivro = idLivro;
-emprestimos[totalEmprestimos].idLeitor = idLeitor;
-emprestimos[totalEmprestimos].diasPrazo = 7;
-emprestimos[totalEmprestimos].devolvido = 0;
-emprestimos[totalEmprestimos].ativo = 1;
-totalEmprestimos++;
-
-acervo[posLivro].disponivel = 0;
-
-printf("\nEmprestimo registrado: \"%s\" para %s (prazo: 7 dias).\n",
-       acervo[posLivro].titulo, leitores[posLeitor].nome);
-}
 
 void listarEmprestimos() {
-if (totalEmprestimos == 0) {
-printf("\nNenhum emprestimo registrado.\n");
-return;
-}
-
-printf("\n%-5s | %-25s | %-25s | %-8s | %-10s\n", "ID", "LIVRO", "LEITOR", "PRAZO", "STATUS");
-printf("--------------------------------------------------------------------------------\n");
-for (int i = 0; i < totalEmprestimos; i++) {
-    if (emprestimos[i].ativo == 1) {
-        int posL = buscarLivro(emprestimos[i].idLivro);
-        int posR = buscarLeitor(emprestimos[i].idLeitor);
-        printf("%-5d | %-25s | %-25s | %d dias  | %-10s\n",
-               emprestimos[i].id,
-               posL != -1 ? acervo[posL].titulo : "Desconhecido",
-               posR != -1 ? leitores[posR].nome : "Desconhecido",
-               emprestimos[i].diasPrazo,
-               emprestimos[i].devolvido ? "Devolvido" : "Em Aberto");
+    if (totalEmprestimos == 0) {
+        printf("\nNenhum emprestimo registrado.\n");
+        return;
     }
-}
+
+    printf("\n%-5s | %-25s | %-25s | %-8s | %-10s | %-10s\n", "ID", "LIVRO", "LEITOR", "PRAZO", "STATUS", "MULTA");
+    printf("------------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < totalEmprestimos; i++) {
+        if (emprestimos[i].ativo == 1) {
+            printf("%-5d | %-25s | %-25s | %d dias  | %-10s | R$ %-8.2f\n",
+                   emprestimos[i].id,
+                   emprestimos[i].tituloLivro,
+                   emprestimos[i].nomeLeitor,
+                   emprestimos[i].diasPrazo,
+                   emprestimos[i].devolvido ? "Devolvido" : "Em Aberto",
+                   emprestimos[i].multa);
+        }
+    }
 }
 
 void registrarDevolucao() {
-int idEmp, posEmp;
+int idEmp, posEmp, diasRealizados;
 printf("\n--- Registrar Devolucao ---\n");
 printf("Digite o ID do emprestimo: ");
 idEmp = lerNumero();
@@ -473,6 +478,24 @@ if (posEmp == -1) {
 if (emprestimos[posEmp].devolvido == 1) {
     printf("\nEste emprestimo ja consta como devolvido.\n");
     return;
+}
+
+printf("Quantos dias o leitor ficou com o livro ate devolver? ");
+diasRealizados = lerNumero();
+
+if (diasRealizados <= 0) {
+    printf("\nERRO! Numero de dias invalido. Devolucao cancelada.\n");
+    return;
+}
+
+if (diasRealizados > emprestimos[posEmp].diasPrazo) {
+    int diasAtraso = diasRealizados - emprestimos[posEmp].diasPrazo;
+    emprestimos[posEmp].multa = (float)diasAtraso * 2.50f;
+    printf("\n[ATENCAO] Livro devolvido com %d dias de atraso!\n", diasAtraso);
+    printf("Multa gerada: R$ %.2f\n", emprestimos[posEmp].multa);
+} else {
+    emprestimos[posEmp].multa = 0.0f;
+    printf("\nLivro devolvido dentro do prazo. Nao ha multas.\n");
 }
 
 emprestimos[posEmp].devolvido = 1;

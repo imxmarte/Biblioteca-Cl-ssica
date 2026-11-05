@@ -30,10 +30,13 @@ int ativo;
 struct Emprestimo {
 int id;
 int idLivro;
+char tituloLivro[50];
 int idLeitor;
+char nomeLeitor[50];
 int diasPrazo;
 int devolvido;    
-int ativo;        
+int ativo;     
+float multa;   
 };
 
 extern struct Livro acervo[MAX];
