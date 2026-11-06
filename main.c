@@ -5,6 +5,8 @@ int opcao;
 
 //---- Marcela função Matriz corredores/prateleiras------
 inicializarMatriz();
+//lê os livros do arquivo e salva na RAM ao iniciar o código
+carregarLivrosDoArquivo();
 
 do {
     //--------- Renan módulo de busca e cadastro----------
