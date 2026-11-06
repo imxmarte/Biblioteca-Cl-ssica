@@ -14,72 +14,90 @@ int matrizEstante[CORREDORES][PRATELEIRAS];
 
 // Renan e Marcela estrutura de cabeçalho
 void exibirCabecalho() {
-printf("\n======================================================\n");
-printf("                  BIBLIOTECA CLASSICA            \n");
-printf("======================================================\n");
+    printf("\n======================================================\n");
+    printf("                  BIBLIOTECA CLASSICA            \n");
+    printf("======================================================\n");
 }
 
 // Renan buscar livros e leitores
 void limparTeclado() {
-int c;
-c = getchar();
-while (c != '\n' && c != EOF) {
-c = getchar();
-}
+    int c;
+    c = getchar();
+    while (c != '\n' && c != EOF) {
+        c = getchar();
+    }
 }
 
 int lerNumero() {
-int n;
-if (scanf("%d", &n) != 1) {
-n = -1;
-}
-limparTeclado();
-return n;
+    int n;
+    if (scanf("%d", &n) != 1) {
+        n = -1;
+    }
+    limparTeclado();
+    return n;
 }
 
 void lerTexto(char destino[], int tamanho) {
-fgets(destino, tamanho, stdin);
-destino[strcspn(destino, "\n")] = '\0';
+    fgets(destino, tamanho, stdin);
+    destino[strcspn(destino, "\n")] = '\0';
 }
 
 int buscarLivro(int id) {
-int i;
-for (i = 0; i < totalLivros; i++) {
-if (acervo[i].id == id && acervo[i].ativo == 1) {
-return i;
-}
-}
+    int i;
+    for (i = 0; i < totalLivros; i++) {
+        if (acervo[i].id == id && acervo[i].ativo == 1) {
+        return i;
+        }
+    }
 return -1;
 }
 
 int buscarLeitor(int id) {
-int i;
-for (i = 0; i < totalLeitores; i++) {
-if (leitores[i].id == id && leitores[i].ativo == 1) {
-return i;
-}
-}
+    int i;
+    for (i = 0; i < totalLeitores; i++) {
+        if (leitores[i].id == id && leitores[i].ativo == 1) {
+        return i;
+        }
+    }
 return -1;
 }
 
 int buscarEmprestimo(int id) {
-int i;
-for (i = 0; i < totalEmprestimos; i++) {
-if (emprestimos[i].id == id && emprestimos[i].ativo == 1) {
-return i;
-}
-}
+    int i;
+    for (i = 0; i < totalEmprestimos; i++) {
+        if (emprestimos[i].id == id && emprestimos[i].ativo == 1) {
+        return i;
+        }
+    }
 return -1;
 }
 // Marcela inicialização em 0 da matriz corredores/prateleiras sempre que o terminal for iniciado
 void inicializarMatriz() {
-int i, j;
-for (i = 0; i < CORREDORES; i++) {
-for (j = 0; j < PRATELEIRAS; j++) {
-matrizEstante[i][j] = 0;
+    int i, j;
+    for (i = 0; i < CORREDORES; i++) {
+        for (j = 0; j < PRATELEIRAS; j++) {
+            matrizEstante[i][j] = 0;
+        }
+    }
 }
+
+//função que cria e escreve os dados do livro no arquivo
+//livro (struct) l (nome da variável local para escrever os dados do livro)
+void livrosArq(Livro l) {
+    FILE *livros = fopen("livros.txt", "a");
+
+    if (livros == NULL) {
+        printf("\nErro! Não foi pssível acessar o arquivo de livros.\n");
+        return;
+    }
+
+    // escreve os dados do livro no arquivo
+    fprintf(livros, "ID: %d | Corredor: %d | Prateleira: %d | Titulo: %s | Autor: %s | Ano: %d\n",
+            l.id, l.corredor, l.prateleira, l.titulo, l.autor, l.ano);
+
+    fclose(livros);
 }
-}
+
 
 // Renan e Marcela módulo de cadastro e busca de livros e leitores junto com matriz
 void cadastrarLivro() {
@@ -139,17 +157,47 @@ acervo[totalLivros].corredor = corredor;
 acervo[totalLivros].prateleira = prateleira;
 
 matrizEstante[corredor][prateleira] = id;
+
+//chama função de escrever livro cadastrado no arquivo
+livrosArq(acervo[totalLivros]);
+
+//Adiciona +1 no contador de livros no total do acervo
 totalLivros++;
 
 printf("\nLivro registrado com sucesso na estante [Corredor %d, Prateleira %d]!\n", corredor, prateleira);
 }
 
-void buscarEListarLivros() {
-int id, pos;
-if (totalLivros == 0) {
-printf("\nNenhum livro cadastrado no acervo.\n");
-return;
+//Função de carregar livros do arquivo na RAM assim que o código for executado
+
+void carregarLivrosDoArquivo() {
+    FILE *livros = fopen("livros.txt", "r");
+    if (livros == NULL) {
+        return;
+    }
+
+    while (!feof(livros) && totalLivros < MAX) {
+        Livro l;
+        int res = fscanf(livros, "ID: %d | Corredor: %d | Prateleira: %d | Titulo: %49[^|] | Autor: %49[^|] | Ano: %d\n",
+                         &l.id, &l.corredor, &l.prateleira, l.titulo, l.autor, &l.ano);
+
+        if (res == 6) {
+            l.disponivel = 1;
+            l.ativo = 1;
+            acervo[totalLivros] = l;
+            matrizEstante[l.corredor][l.prateleira] = l.id;
+            totalLivros++;
+        }
+    }
+
+    fclose(livros);
 }
+
+void buscarEListarLivros() {
+    int id, pos;
+    if (totalLivros == 0) {
+        printf("\nNenhum livro cadastrado no acervo.\n");
+        return;
+    }
 
 printf("\n--- Listagem e Busca de Livros ---\n");
 printf("Digite o ID do livro para buscar (ou 0 para listar todos): ");
