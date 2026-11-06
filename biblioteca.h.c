@@ -9,34 +9,34 @@
 #define PRATELEIRAS 4
 
 struct Livro {
-int id;
-char titulo[50];
-char autor[50];
-int ano;
-int disponivel;   
-int ativo;       
-int corredor;     
-int prateleira;  
+  int id;
+  char titulo[50];
+  char autor[50];
+  int ano;
+  int disponivel;   
+  int ativo;       
+  int corredor;     
+  int prateleira;  
 };
 
 struct Leitor {
-int id;
-char nome[50];
-char telefone[20];
-int idade;
-int ativo;        
+  int id;
+  char nome[50];
+  char telefone[20];
+  int idade;
+  int ativo;        
 };
 
 struct Emprestimo {
-int id;
-int idLivro;
-char tituloLivro[50];
-int idLeitor;
-char nomeLeitor[50];
-int diasPrazo;
-int devolvido;    
-int ativo;     
-float multa;   
+  int id;
+  int idLivro;
+  char tituloLivro[50];
+  int idLeitor;
+  char nomeLeitor[50];
+  int diasPrazo;
+  int devolvido;    
+  int ativo;     
+  float multa;   
 };
 
 extern struct Livro acervo[MAX];
@@ -58,7 +58,9 @@ int buscarLivro(int id);
 int buscarLeitor(int id);
 int buscarEmprestimo(int id);
 void inicializarMatriz();
+void carregarLivrosDoArquivo();
 
+void livrosArq(Livro l);
 void cadastrarLivro();
 void buscarEListarLivros();
 void editarLivro();
