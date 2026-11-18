@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX 50
 #define CORREDORES 3
@@ -58,26 +59,36 @@ int buscarLivro(int id);
 int buscarLeitor(int id);
 int buscarEmprestimo(int id);
 void inicializarMatriz();
-void carregarLivrosDoArquivo();
+void limparTela();
 
-void livrosArq(Livro l);
+
+void livrosArq(struct Livro l);
 void cadastrarLivro();
 void buscarEListarLivros();
 void editarLivro();
 void removerLivro();
 void moduloLivros();
+void reescreverArquivoLivros();
+void carregarLivrosDoArquivo();
 
+
+void leitoresArq(struct Leitor l);
 void cadastrarLeitor();
 void buscarEListarLeitores();
 void editarLeitor();
 void removerLeitor();
 void moduloLeitores();
+void carregarLeitoresDoArquivo();
+void reescreverArquivoLeitores();
 
 void registrarEmprestimo();
 void listarEmprestimos();
 void registrarDevolucao();
 void cancelarEmprestimo();
 void moduloEmprestimos();
+void reescreverArquivoEmprestimos();
+void carregarEmprestimosDoArquivo();
+void empArq(struct Emprestimo e);
 
 void exibirMatrizEstante();
 void ordenarLivrosPorTitulo();
