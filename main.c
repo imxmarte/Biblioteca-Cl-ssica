@@ -7,6 +7,8 @@ int opcao;
 inicializarMatriz();
 //lê os livros do arquivo e salva na RAM ao iniciar o código
 carregarLivrosDoArquivo();
+//lê os empréstimos do arquivo e salva na RAM ao iniciar o código
+carregarEmprestimosDoArquivo();
 
 do {
     //--------- Renan módulo de busca e cadastro----------
