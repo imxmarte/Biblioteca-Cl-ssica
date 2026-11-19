@@ -793,7 +793,7 @@ void cancelarEmprestimo() {
     reescreverArquivoEmprestimos();
 	printf("\nRegistro de emprestimo cancelado com sucesso.\n");
 }
-
+// Módulo de empréstimo de livros
 void moduloEmprestimos() {
 	limparTela();
 	int opcao;
@@ -848,7 +848,7 @@ void exibirMatrizEstante() {
 		printf("\n");
 	}
 }
-
+// Ordenando os livros por título Renan
 void ordenarLivrosPorTitulo() {
 	int i, j;
 	struct Livro temp;
@@ -894,7 +894,8 @@ void relatorioEstatistico() {
 			emprestados++;
 		}
 	}
-
+//relátorio de estatistica do acervo 
+	
 	printf("\n======================================================\n");
 	printf("         RELATORIO ESTATISTICO DO ACERVO              \n");
 	printf("======================================================\n");
