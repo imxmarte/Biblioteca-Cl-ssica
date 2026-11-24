@@ -9,8 +9,11 @@ inicializarMatriz();
 carregarLivrosDoArquivo();
 //lê os empréstimos do arquivo e salva na RAM ao iniciar o código
 carregarEmprestimosDoArquivo();
+//lê os leitores do arquivo e salva na RAM ao iniciar o código
+carregarLeitoresDoArquivo();
 
 do {
+    limparTela();
     //--------- Renan módulo de busca e cadastro----------
     exibirCabecalho();
     printf("1. Modulo de Livros / Acervo\n");
