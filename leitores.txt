@@ -1,0 +1,11 @@
+Carteirinha;Nome;Telefone;Idade
+101;Ana Clara Silva;41998765432;22
+102;Bruno Henrique Costa;41987654321;28
+103;Camila Ferreira Lima;41991234567;19
+104;Diego Alves Pereira;41996543210;34
+105;Eduarda Santos Rocha;41988776655;25
+106;Felipe Martins Oliveira;41999887766;41
+107;Gabriela Souza Mendes;41984561230;30
+108;Lucas Ribeiro Nogueira;41993216548;21
+109;Mariana Carvalho Dias;41985479632;27
+110;Rafael Gomes Barbosa;41997418520;36

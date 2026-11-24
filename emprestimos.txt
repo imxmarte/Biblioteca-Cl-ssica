@@ -1,0 +1,11 @@
+ID;ID_Livro;Titulo;ID_Leitor;Nome_Leitor;Prazo;Devolvido;Multa
+1;1;Dom Casmurro;101;Ana Clara Silva;7;1;0.00
+2;2;O Cortico;102;Bruno Henrique Costa;7;1;5.00
+3;3;Memorias Postumas de Bras Cubas;103;Camila Ferreira Lima;7;0;0.00
+4;4;Vidas Secas;104;Diego Alves Pereira;7;1;0.00
+5;5;Grande Sertao Veredas;105;Eduarda Santos Rocha;7;0;0.00
+6;6;Capitaes da Areia;106;Felipe Martins Oliveira;7;1;7.50
+7;7;A Hora da Estrela;107;Gabriela Souza Mendes;7;0;0.00
+8;8;O Auto da Compadecida;108;Lucas Ribeiro Nogueira;7;1;0.00
+9;9;Iracema;109;Mariana Carvalho Dias;7;1;2.50
+10;10;Triste Fim de Policarpo Quaresma;110;Rafael Gomes Barbosa;7;0;0.00ros.csv
