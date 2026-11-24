@@ -12,15 +12,15 @@ int totalEmprestimos = 0;
 // Marcela matriz de posição física do livro
 int matrizEstante[CORREDORES][PRATELEIRAS];
 
-// Renan e Marcela estrutura de cabeçalho
+// Renan estrutura de cabeçalho
 void exibirCabecalho() {
+    limparTela();
 	printf("\n======================================================\n");
 	printf("                  BIBLIOTECA CLASSICA            \n");
 	printf("======================================================\n");
 }
 
-// Renan buscar livros e leitores
-
+//Marcela limpar tela para melhor visualização
 void limparTela() {
 #ifdef _WIN32
 	system("cls");
@@ -29,12 +29,13 @@ void limparTela() {
 #endif
 }
 
-
+//Renan estrutura
 void limparTeclado() {
 	int c;
 	while ((c = getchar()) != '\n' && c != EOF);
 }
 
+//Renan estrutura
 int lerNumero() {
 	int n;
 	if (scanf("%d", &n) != 1) {
@@ -44,6 +45,7 @@ int lerNumero() {
 	return n;
 }
 
+//Renan estrutura
 void lerTexto(char destino[], int tamanho) {
 	// Lê o texto digitado pelo usuário
 	if (fgets(destino, tamanho, stdin) != NULL) {
@@ -54,7 +56,7 @@ void lerTexto(char destino[], int tamanho) {
 		}
 	}
 }
-
+//Renan busca
 int buscarLivro(int id) {
 	int i;
 	for (i = 0; i < totalLivros; i++) {
@@ -64,7 +66,7 @@ int buscarLivro(int id) {
 	}
 	return -1;
 }
-
+//Renan busca
 int buscarLeitor(int id) {
 	int i;
 	for (i = 0; i < totalLeitores; i++) {
@@ -74,7 +76,7 @@ int buscarLeitor(int id) {
 	}
 	return -1;
 }
-
+//Renan busca
 int buscarEmprestimo(int id) {
 	int i;
 	for (i = 0; i < totalEmprestimos; i++) {
@@ -93,41 +95,47 @@ void inicializarMatriz() {
 		}
 	}
 }
-
+//Marcela: Edição e remoção de dados do arquivo FILE
 void reescreverArquivoLivros() {
 	FILE *arqLivros = fopen("livros.txt", "w");
 	if (arqLivros == NULL) return;
 
+	fprintf(arqLivros, "ID;Corredor;Prateleira;Titulo;Autor;Ano\n");
+
 	for (int i = 0; i < totalLivros; i++) {
 		if (acervo[i].ativo == 1) {
-			fprintf(arqLivros, "ID: %d | Corredor: %d | Prateleira: %d | Titulo: %s | Autor: %s | Ano: %d\n",
+			fprintf(arqLivros, "%d;%d;%d;%s;%s;%d\n",
 			        acervo[i].id, acervo[i].corredor, acervo[i].prateleira,
 			        acervo[i].titulo, acervo[i].autor, acervo[i].ano);
 		}
 	}
 	fclose(arqLivros);
 }
-
+//Marcela: Edição e remoção de dados do arquivo FILE
 void reescreverArquivoLeitores() {
 	FILE *arqLeitores = fopen("leitores.txt", "w");
 	if (arqLeitores == NULL) return;
 
+	fprintf(arqLeitores, "Carteirinha;Nome;Telefone;Idade\n");
+
 	for (int i = 0; i < totalLeitores; i++) {
 		if (leitores[i].ativo == 1) {
-			fprintf(arqLeitores, "Carteirinha: %d | Nome: %s | Telefone: %s | Idade: %d\n",
+			fprintf(arqLeitores, "%d;%s;%s;%d\n",
 			        leitores[i].id, leitores[i].nome, leitores[i].telefone, leitores[i].idade);
 		}
 	}
 	fclose(arqLeitores);
 }
-
+//Marcela: Edição e remoção de dados do arquivo FILE
 void reescreverArquivoEmprestimos() {
 	FILE *arqEmp = fopen("emprestimos.txt", "w");
 	if (arqEmp == NULL) return;
 
+	fprintf(arqEmp, "ID;ID_Livro;Titulo;ID_Leitor;Nome_Leitor;Prazo;Devolvido;Multa\n");
+
 	for (int i = 0; i < totalEmprestimos; i++) {
 		if (emprestimos[i].ativo == 1) {
-			fprintf(arqEmp, "ID: %d | ID Livro: %d | Titulo: %s | ID Leitor: %d | Nome Leitor: %s | Prazo: %d | Devolvido: %d | Multa: %.2f\n",
+			fprintf(arqEmp, "%d;%d;%s;%d;%s;%d;%d;%.2f\n",
 			        emprestimos[i].id, emprestimos[i].idLivro, emprestimos[i].tituloLivro,
 			        emprestimos[i].idLeitor, emprestimos[i].nomeLeitor, emprestimos[i].diasPrazo,
 			        emprestimos[i].devolvido, emprestimos[i].multa);
@@ -135,108 +143,94 @@ void reescreverArquivoEmprestimos() {
 	}
 	fclose(arqEmp);
 }
-
-// Corrigido o nome do arquivo para "livros.txt"
+//Marcela: FILE de salvamento 
 void livrosArq(struct Livro l) {
 	FILE *arqLivros = fopen("livros.txt", "a");
-
 	if (arqLivros == NULL) {
 		printf("\nErro! Nao foi possivel acessar o arquivo de livros.\n");
 		return;
 	}
 
-	fprintf(arqLivros, "ID: %d | Corredor: %d | Prateleira: %d | Titulo: %s | Autor: %s | Ano: %d\n",
+	// Se o arquivo estiver vazio (novo), escreve o cabecalho primeiro
+	if (ftell(arqLivros) == 0) {
+		fprintf(arqLivros, "ID;Corredor;Prateleira;Titulo;Autor;Ano\n");
+	}
+
+	fprintf(arqLivros, "%d;%d;%d;%s;%s;%d\n",
 	        l.id, l.corredor, l.prateleira, l.titulo, l.autor, l.ano);
 
 	fclose(arqLivros);
 }
-
+//Marcela: FILE de salvamento 
 void leitoresArq(struct Leitor l) {
 	FILE *arqLeitores = fopen("leitores.txt", "a");
-
 	if (arqLeitores == NULL) {
 		printf("\nErro ao abrir o arquivo de leitores!\n");
 		return;
 	}
 
-	fprintf(arqLeitores, "Carteirinha: %d | Nome: %s | Telefone: %s | Idade: %d\n",
+	fprintf(arqLeitores, "%d;%s;%s;%d\n",
 	        l.id, l.nome, l.telefone, l.idade);
 
 	fclose(arqLeitores);
 }
-
+//Marcela: FILE de salvamento 
 void empArq(struct Emprestimo e) {
 	FILE *arqEmp = fopen("emprestimos.txt", "a");
-
 	if (arqEmp == NULL) {
 		printf("\nErro! Nao foi possivel acessar o arquivo de emprestimos.\n");
 		return;
 	}
 
-	fprintf(arqEmp, "ID: %d | ID Livro: %d | Titulo: %s | ID Leitor: %d | Nome Leitor: %s | Prazo: %d | Devolvido: %d | Multa: %.2f\n",
-	        e.id, e.idLivro, e.tituloLivro, e.idLeitor, e.nomeLeitor, e.diasPrazo, e.devolvido, e.multa);
+	if (ftell(arqEmp) == 0) {
+		fprintf(arqEmp, "ID;ID_Livro;Titulo;ID_Leitor;Nome_Leitor;Prazo;Devolvido;Multa\n");
+	}
+
+	fprintf(arqEmp, "%d;%d;%s;%d;%s;%d;%d;%.2f\n",
+	        e.id, e.idLivro, e.tituloLivro, e.idLeitor, e.nomeLeitor,
+	        e.diasPrazo, e.devolvido, e.multa);
 
 	fclose(arqEmp);
 }
-
+// Marcela: carregar dados na RAM assim que o código for iniciado
 void carregarLeitoresDoArquivo() {
-	FILE *arqleitores = fopen("leitores.txt", "r");
-	if (arqleitores == NULL) {
-		return;
-	}
+	FILE *arqLeitores = fopen("leitores.txt", "r");
+	if (arqLeitores == NULL) return;
 
 	char linha[256];
-	// fgets l� linha por linha e garante que o arquivo sempre avance at� o fim
-	while (fgets(linha, sizeof(linha), arqleitores) != NULL && totalLeitores < MAX) {
+	while (fgets(linha, sizeof(linha), arqLeitores) != NULL && totalLeitores < MAX) {
 		struct Leitor l;
 
-		// %49[^|] l� tudo at� a barra '|' (permitindo nomes compostos com espa�o)
-		int res = sscanf(linha, "Carteirinha: %d | Nome: %49[^|] | Telefone: %19[^|] | Idade: %d",
+		int res = sscanf(linha, "%d;%49[^;];%19[^;];%d",
 		                 &l.id, l.nome, l.telefone, &l.idade);
 
 		if (res == 4) {
-			// Remove o espa�o em branco extra que fica no final antes da '|'
-			int lenNome = strlen(l.nome);
-			if (lenNome > 0 && l.nome[lenNome - 1] == ' ') l.nome[lenNome - 1] = '\0';
-
-			int lenTel = strlen(l.telefone);
-			if (lenTel > 0 && l.telefone[lenTel - 1] == ' ') l.telefone[lenTel - 1] = '\0';
-
 			l.ativo = 1;
 			leitores[totalLeitores] = l;
 			totalLeitores++;
 		}
 	}
 
-	fclose(arqleitores);
+	fclose(arqLeitores);
 }
-
+// Marcela: carregar dados na RAM assim que o código for iniciado
 void carregarLivrosDoArquivo() {
 	FILE *arqLivros = fopen("livros.txt", "r");
-	if (arqLivros == NULL) {
-		return;
-	}
+	if (arqLivros == NULL) return;
 
 	char linha[256];
 	while (fgets(linha, sizeof(linha), arqLivros) != NULL && totalLivros < MAX) {
 		struct Livro l;
 
-		int res = sscanf(linha, "ID: %d | Corredor: %d | Prateleira: %d | Titulo: %49[^|] | Autor: %49[^|] | Ano: %d",
+		// O sscanf ignora automaticamente a linha de cabecalho por nao comecar com numero inteiro
+		int res = sscanf(linha, "%d;%d;%d;%49[^;];%49[^;];%d",
 		                 &l.id, &l.corredor, &l.prateleira, l.titulo, l.autor, &l.ano);
 
 		if (res == 6) {
-			// Remove o espa�o em branco extra que fica no final antes da '|'
-			int lenTit = strlen(l.titulo);
-			if (lenTit > 0 && l.titulo[lenTit - 1] == ' ') l.titulo[lenTit - 1] = '\0';
-
-			int lenAut = strlen(l.autor);
-			if (lenAut > 0 && l.autor[lenAut - 1] == ' ') l.autor[lenAut - 1] = '\0';
-
 			l.disponivel = 1;
 			l.ativo = 1;
 			acervo[totalLivros] = l;
 
-			// Garante que n�o acesse fora da matriz caso o arquivo tenha sido editado manualmente
 			if (l.corredor >= 0 && l.corredor < CORREDORES && l.prateleira >= 0 && l.prateleira < PRATELEIRAS) {
 				matrizEstante[l.corredor][l.prateleira] = l.id;
 			}
@@ -246,34 +240,25 @@ void carregarLivrosDoArquivo() {
 
 	fclose(arqLivros);
 }
-
+// Marcela: carregar dados na RAM assim que o código for iniciado
 void carregarEmprestimosDoArquivo() {
 	FILE *arqEmp = fopen("emprestimos.txt", "r");
-	if (arqEmp == NULL) {
-		return;
-	}
+	if (arqEmp == NULL) return;
 
 	char linha[300];
 	while (fgets(linha, sizeof(linha), arqEmp) != NULL && totalEmprestimos < MAX) {
 		struct Emprestimo e;
 
-		int res = sscanf(linha, "ID: %d | ID Livro: %d | Titulo: %49[^|] | ID Leitor: %d | Nome Leitor: %49[^|] | Prazo: %d | Devolvido: %d | Multa: %f",
+		int res = sscanf(linha, "%d;%d;%49[^;];%d;%49[^;];%d;%d;%f",
 		                 &e.id, &e.idLivro, e.tituloLivro, &e.idLeitor, e.nomeLeitor,
 		                 &e.diasPrazo, &e.devolvido, &e.multa);
 
 		if (res == 8) {
-			// Remove espaco extra antes da barra '|'
-			int lenTit = strlen(e.tituloLivro);
-			if (lenTit > 0 && e.tituloLivro[lenTit - 1] == ' ') e.tituloLivro[lenTit - 1] = '\0';
-
-			int lenLeitor = strlen(e.nomeLeitor);
-			if (lenLeitor > 0 && e.nomeLeitor[lenLeitor - 1] == ' ') e.nomeLeitor[lenLeitor - 1] = '\0';
-
 			e.ativo = 1;
 			emprestimos[totalEmprestimos] = e;
 			totalEmprestimos++;
 
-			// Se o emprestimo ainda esta em aberto, marca o livro como indisponivel no acervo
+			// Se o emprestimo estiver em aberto, marca o livro como indisponivel na RAM
 			if (e.devolvido == 0) {
 				int posLivro = buscarLivro(e.idLivro);
 				if (posLivro != -1) {
@@ -289,6 +274,7 @@ void carregarEmprestimosDoArquivo() {
 
 // Renan e Marcela módulo de cadastro e busca de livros e leitores junto com matriz
 void cadastrarLivro() {
+    limparTela();
 	int id, corredor, prateleira;
 
 	if (totalLivros >= MAX) {
@@ -354,7 +340,7 @@ void cadastrarLivro() {
 
 	printf("\nLivro registrado com sucesso na estante [Corredor %d, Prateleira %d]!\n", corredor, prateleira);
 }
-
+//Renan busca
 void buscarEListarLivros() {
 	int id, pos;
 	if (totalLivros == 0) {
@@ -389,7 +375,7 @@ void buscarEListarLivros() {
 		}
 	}
 }
-
+// Renan estrutura Marcela função de FILE
 void editarLivro() {
 	limparTela();
 	int id, pos;
@@ -422,7 +408,7 @@ void editarLivro() {
 
 	printf("\nDados do livro atualizados com sucesso!\n");
 }
-
+// Renan estrutura Marcela função de FILE
 void removerLivro() {
 	limparTela();
 	int id, pos;
@@ -448,8 +434,9 @@ void removerLivro() {
 
 	printf("\nLivro \"%s\" removido do acervo e posicao na estante liberada com sucesso!\n", acervo[pos].titulo);
 }
-
+//Renan e Marcela estrutura 
 void moduloLivros() {
+    limparTela();
 	int opcao;
 	do {
 		printf("\n--- [MODULO 1: ACERVO DE LIVROS] ---\n");
@@ -482,7 +469,7 @@ void moduloLivros() {
 		}
 	} while (opcao != 0);
 }
-
+//Renan estrutura Marcela função FILE
 void cadastrarLeitor() {
 	limparTela();
 	int id;
@@ -533,7 +520,7 @@ void cadastrarLeitor() {
 
 	printf("\nLeitor registrado! Total de leitores ativos: %d\n", totalLeitores);
 }
-
+//Renan estrutura e Marcela função FILE 
 void buscarEListarLeitores() {
 	limparTela();
 	int id, pos;
@@ -565,7 +552,7 @@ void buscarEListarLeitores() {
 		}
 	}
 }
-
+//Renan estrutura e Marcela função FILE 
 void editarLeitor() {
 	limparTela();
 	int id, pos;
@@ -589,7 +576,7 @@ void editarLeitor() {
 	reescreverArquivoLeitores();
 	printf("\nDados atualizados com sucesso!\n");
 }
-
+//Renan estrutura e Marcela função FILE 
 void removerLeitor() {
 	limparTela();
 	int id, pos;
@@ -614,7 +601,7 @@ void removerLeitor() {
 	reescreverArquivoLeitores();
 	printf("\nCarteirinha %d cancelada com sucesso!\n", id);
 }
-
+//Renan e Marcela estrutura
 void moduloLeitores() {
 	limparTela();
 	int opcao;
@@ -648,7 +635,7 @@ void moduloLeitores() {
 		}
 	} while (opcao != 0);
 }
-
+//Renan estrutura Marcela função FILE
 void registrarEmprestimo() {
 	limparTela();
 	int idLeitor, idLivro, posLeitor, posLivro;
@@ -701,7 +688,7 @@ void registrarEmprestimo() {
 	       acervo[posLivro].titulo, leitores[posLeitor].nome);
 }
 
-
+//Renan estrutura Marcela função FILE
 void listarEmprestimos() {
 	limparTela();
 	if (totalEmprestimos == 0) {
@@ -723,7 +710,7 @@ void listarEmprestimos() {
 		}
 	}
 }
-
+//Renan estrutura Marcela função FILE
 void registrarDevolucao() {
 	limparTela();
 	int idEmp, posEmp, diasRealizados;
@@ -769,7 +756,7 @@ void registrarDevolucao() {
     reescreverArquivoEmprestimos();
 	printf("\nDevolucao concluida com sucesso! O livro esta novamente disponivel na estante.\n");
 }
-
+//Renan estrutura Marcela função FILE
 void cancelarEmprestimo() {
 	limparTela();
 	int idEmp, posEmp;
@@ -793,7 +780,7 @@ void cancelarEmprestimo() {
     reescreverArquivoEmprestimos();
 	printf("\nRegistro de emprestimo cancelado com sucesso.\n");
 }
-// Módulo de empréstimo de livros
+//Renan e Marcela estrutura
 void moduloEmprestimos() {
 	limparTela();
 	int opcao;
@@ -827,7 +814,7 @@ void moduloEmprestimos() {
 		}
 	} while (opcao != 0);
 }
-
+//Marcela estrutura
 void exibirMatrizEstante() {
 	limparTela();
 	printf("            ");
@@ -848,7 +835,7 @@ void exibirMatrizEstante() {
 		printf("\n");
 	}
 }
-// Ordenando os livros por título Renan
+//Marcela estrutura
 void ordenarLivrosPorTitulo() {
 	int i, j;
 	struct Livro temp;
@@ -864,7 +851,7 @@ void ordenarLivrosPorTitulo() {
 	}
 	printf("\n[SUCESSO] Acervo ordenado alfabeticamente por Titulo.\n");
 }
-
+//Marcela estrutura
 void ordenarLivrosPorID() {
 	int i, j;
 	struct Livro temp;
@@ -880,7 +867,7 @@ void ordenarLivrosPorID() {
 	}
 	printf("\n[SUCESSO] Acervo ordenado por ID!\n");
 }
-
+//Marcela estrutura
 void relatorioEstatistico() {
 	limparTela();
 	int disponiveis = 0, emprestados = 0, removidos = 0;
@@ -894,8 +881,7 @@ void relatorioEstatistico() {
 			emprestados++;
 		}
 	}
-//relátorio de estatistica do acervo 
-	
+
 	printf("\n======================================================\n");
 	printf("         RELATORIO ESTATISTICO DO ACERVO              \n");
 	printf("======================================================\n");
@@ -906,7 +892,7 @@ void relatorioEstatistico() {
 	printf(" Total de Leitores Ativos: %d\n", totalLeitores);
 	printf(" Total de Emprestimos Realizados: %d\n", totalEmprestimos);
 }
-
+//Marcela estrutura
 void moduloRelatoriosMatriz() {
 	limparTela();
 	int opcao;
