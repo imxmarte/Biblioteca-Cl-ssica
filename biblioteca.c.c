@@ -97,7 +97,7 @@ void inicializarMatriz() {
 }
 //Marcela: Edição e remoção de dados do arquivo FILE
 void reescreverArquivoLivros() {
-	FILE *arqLivros = fopen("livros.txt", "w");
+	FILE *arqLivros = fopen("livros.csv", "w");
 	if (arqLivros == NULL) return;
 
 	fprintf(arqLivros, "ID;Corredor;Prateleira;Titulo;Autor;Ano\n");
@@ -113,7 +113,7 @@ void reescreverArquivoLivros() {
 }
 //Marcela: Edição e remoção de dados do arquivo FILE
 void reescreverArquivoLeitores() {
-	FILE *arqLeitores = fopen("leitores.txt", "w");
+	FILE *arqLeitores = fopen("leitores.csv", "w");
 	if (arqLeitores == NULL) return;
 
 	fprintf(arqLeitores, "Carteirinha;Nome;Telefone;Idade\n");
@@ -128,7 +128,7 @@ void reescreverArquivoLeitores() {
 }
 //Marcela: Edição e remoção de dados do arquivo FILE
 void reescreverArquivoEmprestimos() {
-	FILE *arqEmp = fopen("emprestimos.txt", "w");
+	FILE *arqEmp = fopen("emprestimos.csv", "w");
 	if (arqEmp == NULL) return;
 
 	fprintf(arqEmp, "ID;ID_Livro;Titulo;ID_Leitor;Nome_Leitor;Prazo;Devolvido;Multa\n");
@@ -145,7 +145,7 @@ void reescreverArquivoEmprestimos() {
 }
 //Marcela: FILE de salvamento 
 void livrosArq(struct Livro l) {
-	FILE *arqLivros = fopen("livros.txt", "a");
+	FILE *arqLivros = fopen("livros.csv", "a");
 	if (arqLivros == NULL) {
 		printf("\nErro! Nao foi possivel acessar o arquivo de livros.\n");
 		return;
@@ -163,7 +163,7 @@ void livrosArq(struct Livro l) {
 }
 //Marcela: FILE de salvamento 
 void leitoresArq(struct Leitor l) {
-	FILE *arqLeitores = fopen("leitores.txt", "a");
+	FILE *arqLeitores = fopen("leitores.csv", "a");
 	if (arqLeitores == NULL) {
 		printf("\nErro ao abrir o arquivo de leitores!\n");
 		return;
@@ -176,7 +176,7 @@ void leitoresArq(struct Leitor l) {
 }
 //Marcela: FILE de salvamento 
 void empArq(struct Emprestimo e) {
-	FILE *arqEmp = fopen("emprestimos.txt", "a");
+	FILE *arqEmp = fopen("emprestimos.csv", "a");
 	if (arqEmp == NULL) {
 		printf("\nErro! Nao foi possivel acessar o arquivo de emprestimos.\n");
 		return;
@@ -194,7 +194,7 @@ void empArq(struct Emprestimo e) {
 }
 // Marcela: carregar dados na RAM assim que o código for iniciado
 void carregarLeitoresDoArquivo() {
-	FILE *arqLeitores = fopen("leitores.txt", "r");
+	FILE *arqLeitores = fopen("leitores.csv", "r");
 	if (arqLeitores == NULL) return;
 
 	char linha[256];
@@ -215,7 +215,7 @@ void carregarLeitoresDoArquivo() {
 }
 // Marcela: carregar dados na RAM assim que o código for iniciado
 void carregarLivrosDoArquivo() {
-	FILE *arqLivros = fopen("livros.txt", "r");
+	FILE *arqLivros = fopen("livros.csv", "r");
 	if (arqLivros == NULL) return;
 
 	char linha[256];
@@ -242,7 +242,7 @@ void carregarLivrosDoArquivo() {
 }
 // Marcela: carregar dados na RAM assim que o código for iniciado
 void carregarEmprestimosDoArquivo() {
-	FILE *arqEmp = fopen("emprestimos.txt", "r");
+	FILE *arqEmp = fopen("emprestimos.csv", "r");
 	if (arqEmp == NULL) return;
 
 	char linha[300];
